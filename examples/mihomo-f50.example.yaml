@@ -1,0 +1,99 @@
+# Template only: supply your own private subscription and random controller secret.
+mixed-port: 7890
+allow-lan: false
+bind-address: 127.0.0.1
+mode: rule
+log-level: warning
+ipv6: false
+external-controller: 192.168.77.1:9090
+secret: REPLACE_WITH_A_LONG_RANDOM_SECRET
+external-ui: ui
+interface-name: sipa_eth8
+profile:
+  store-selected: true
+  store-fake-ip: true
+tun:
+  enable: true
+  stack: gvisor
+  device: mihomo
+  auto-route: true
+  auto-redirect: false
+  auto-detect-interface: false
+  strict-route: true
+  mtu: 1400
+  dns-hijack:
+  - any:53
+  - tcp://any:53
+  route-exclude-address:
+  - 192.168.77.0/24
+dns:
+  enable: true
+  listen: 127.0.0.1:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - '*.lan'
+  - '*.local'
+  - localhost
+  - +.msftconnecttest.com
+  - +.msftncsi.com
+  default-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  nameserver:
+  - https://1.1.1.1/dns-query
+  proxy-server-nameserver:
+  - https://dns.alidns.com/dns-query
+  direct-nameserver:
+  - https://dns.alidns.com/dns-query
+  respect-rules: true
+proxy-providers:
+  subscription:
+    type: http
+    url: https://example.invalid/clash.yaml
+    path: ./providers/subscription.yaml
+    interval: 86400
+    header:
+      User-Agent:
+      - clash.meta
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+      lazy: true
+proxy-groups:
+- name: PROXY
+  type: select
+  proxies:
+  - AUTO
+  use:
+  - subscription
+- name: AUTO
+  type: url-test
+  use:
+  - subscription
+  url: https://www.gstatic.com/generate_204
+  interval: 600
+  tolerance: 80
+  lazy: true
+rule-providers:
+  geosite-cn:
+    type: file
+    behavior: domain
+    format: mrs
+    path: ./rules/geosite-cn.mrs
+  geoip-cn:
+    type: file
+    behavior: ipcidr
+    format: mrs
+    path: ./rules/geoip-cn.mrs
+rules:
+- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+- DOMAIN-SUFFIX,lan,DIRECT
+- RULE-SET,geosite-cn,DIRECT
+- RULE-SET,geoip-cn,DIRECT,no-resolve
+- MATCH,PROXY

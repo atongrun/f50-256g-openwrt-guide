@@ -1,0 +1,19 @@
+# Nothing from the actual device belongs in this repository.
+private/
+backups/
+evidence/
+downloads/
+work/
+*.img
+*.bin
+*.pac
+*.dpapi
+*.key
+*.pem
+*.pcap
+*.log
+*subscription*
+*dedione*
+__pycache__/
+.venv/
+.env*
