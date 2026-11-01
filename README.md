@@ -46,8 +46,6 @@
 - 我的小站：[aibuy.bid](https://aibuy.bid/)，平时用的设备和 VPS 都放在这里
 - 搭节点用的 VPS：[DediOne 洛杉矶](https://aibuy.bid/vps/dedione/)
 
-以上部分是返利链接，通过它购买我会拿一点佣金，价格不变。
-
 ## 许可证与来源
 
 本站原创文档和辅助检查脚本采用 MIT 许可证。mu300-linux、工具包、内核、Magisk、Mihomo 保留各自许可证。这个仓库没有重新打包它们的固件或二进制文件，也不是中兴官方项目。具体来源见 [SOURCES.md](SOURCES.md)。
